@@ -18,6 +18,7 @@ import CompletedTasks from './App/CompletedTasks';
 import ListOneTask from './App/listOneTask';
 import CalendarHome from './App/CalendarHome';
 import UserProvider from './context/UserContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Router () {
@@ -41,6 +42,17 @@ export default function Router () {
     if (!fontsLoaded) {
         return null;
     }
+
+    // async function name() {
+    //     try {
+    //         await AsyncStorage.removeItem('userId');
+    //         await AsyncStorage.removeItem('userId');
+    //     } catch (error) {
+    //     // 
+    //     }
+    // }
+
+    // name();
   
     return (
         <SafeAreaView 

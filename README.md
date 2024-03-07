@@ -18,4 +18,7 @@ Estamos animados em anunciar que o backend estará disponível em breve no repos
 
 Sua contribuição é mais do que bem-vinda. Juntos, podemos construir uma comunidade vibrante e tornar o Private Task List ainda mais incrível. Obrigado por fazer parte deste projeto emocionante! 🚀
 
-![Prints do app](caminho/para/imagem.jpg)
+![Prints do app](print-screen/1.jpg)
+![Prints do app](print-screen/2.jpg)
+![Prints do app](print-screen/3.jpg)
+![Prints do app](print-screen/4.jpg)

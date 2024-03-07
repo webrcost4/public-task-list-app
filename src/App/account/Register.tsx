@@ -35,22 +35,16 @@ export function Register() {
 
 
     const fetchApi = async () => {
-        try {
-            
-            await Api.post('/create-user', user)
-                .then((response)=> {
+        await Api.post('/create-user', user)
+            .then((response)=> {
                     
-                    const {name, userId}: IUser = response.data;
-                    setStoreData(name, userId);
+                const {name, userId}: IUser = response.data;
+                setStoreData(name, userId);
 
-                    navigation.navigate('Home');
+                navigation.navigate('CalendarHome');
 
-                }).catch(err=> console.log(err));
-                
-
-        } catch (error) {
-            console.log(error);
-        }
+            }).catch(err=> console.log(err));
+    
     };
 
     return (
