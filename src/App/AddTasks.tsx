@@ -1,16 +1,27 @@
 import React, { useState } from 'react';
-import md5 from 'md5';
 
 import { TextInputMask } from 'react-native-masked-text';
 import { View, Text, ScrollView, TextInput, TouchableHighlight } from 'react-native';
 import { styles } from '../styles/styles';
 import { Api } from '../resources/api/api';
 import Alert from '../Components/Alerts/Alert';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AddTasks = () => {
 
     const [alert, setAlert] = useState<boolean>(false);
     const [typeAlert, setTypeAlert] = useState<'error' | 'success' | null>();
+
+    const [userId, setUserId] = useState<string | null>();
+
+    (async () => {
+        try {
+            const userStor = await AsyncStorage.getItem('userId');
+            setUserId(userStor);
+        } catch (error) {
+            console.log(error);
+        }
+    })();
 
     function useAlert(type: 'error' | 'success') {
 
@@ -26,11 +37,6 @@ const AddTasks = () => {
             setTypeAlert(null);
         }, 3000);
     }
-    
-    const generateId = () => {
-        const newDate = new Date();
-        return md5(`${newDate.getSeconds(), newDate.getMilliseconds() + Math.floor(Math.random() * 3000000000000)}`);
-    };
 
     const [ data, setData ] = useState({
         title: '',
@@ -45,13 +51,15 @@ const AddTasks = () => {
 
         if (date.length >= 10 && title.length >= 1 && description.length >= 1)
             await Api.post('/add-new-task', {
-                title, description, date, hour, 
-                userId: '650327aa4ce2ced30cf110d9',
-                taskId: generateId(),
-                taskCompleted: false
+                title,
+                description,
+                date,
+                hour,
+                userId,
+                taskCompleted: false,
             }).then(()=> {
                 useAlert('success');
-            }).catch(()=> useAlert('error') );
+            }).catch((err)=> {console.log(err);useAlert('error');} );
         else
             useAlert('error');
     };

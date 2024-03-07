@@ -2,31 +2,38 @@ import React, { useCallback, useState } from 'react';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import Checkbox from 'expo-checkbox';
 
+import { styles } from '../styles/styles';
+
 import { View, Text, ScrollView } from 'react-native';
 import { Api } from '../resources/api/api';
 import { propsDataApi, propsStack } from '../../@types';
-import { styles } from '../styles/styles';
 import { TouchableHighlight } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useUserContext } from '../context/UserContext';
+import { formatDate } from '../resources/functions/functiosn';
 
 
 const CompletedTasks = () => {
+
+    const { user } = useUserContext();
 
     const navigation = useNavigation<propsStack>();
     const [ tasks, setTasks ] = useState<propsDataApi>();
 
     const alterDataApi = async (id: string) => {
-        await Api.put(`/update-task/${id}`, {
+        await Api.put('/update-task', {
+            userId: user.userId,
+            taskId: id,
             taskCompleted: false
         }).then(()=> {
-            console.log('ok');
+            fetchDataApi();
         }).catch(err=> console.log(err));
     };
 
     const fetchDataApi = async () => {
-        await Api.get('/list-all-tasks/650327aa4ce2ced30cf110d9')
+        await Api.get(`/list-all-tasks/${user.userId}`)
             .then(response=> {
-                setTasks(response.data);
+                setTasks(response.data[0]);
             })
             .catch(err=> console.log(err));
     };
@@ -47,7 +54,7 @@ const CompletedTasks = () => {
                         <View key={key}>
                             {   
                             
-                                element.taskCompleted == true ?
+                                element.taskCompleted === true ?
                                     <TouchableHighlight 
                                         underlayColor='transparent'
                                         onPress={()=> 
@@ -56,7 +63,7 @@ const CompletedTasks = () => {
                                         }>
                                         <View> 
                                             <Text style={styles.titleItemCardGreen}>
-                                                {element.date}
+                                                {formatDate(element.date)}
                                             </Text>
                                             <View style={styles.cardTask}>
 
@@ -65,7 +72,6 @@ const CompletedTasks = () => {
                                                     value={Boolean(element.taskCompleted)}
                                                     onValueChange={()=> {
                                                         alterDataApi(element.taskId);
-                                                        fetchDataApi();
                                                     }}
                                                     color={element.description ? '#000' : undefined}
                                                 />

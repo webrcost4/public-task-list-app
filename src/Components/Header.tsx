@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image } from 'react-native';
 import { styles } from '../styles/styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 const Header = () => {
+
+    const [name, setName] = useState<string | null>();
+
+    const getLocalStorage = async () => {
+        try {
+            const nameStor = await AsyncStorage.getItem('name');
+            setName(nameStor);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    getLocalStorage();
+
     return(
         <View style={{ 
             paddingTop: 35,
@@ -30,7 +45,7 @@ const Header = () => {
                     }}
                     source={require('../../assets/profile.jpg')}
                 />
-                <Text style={styles.textDefaultDark}>Weber costa</Text>
+                <Text style={styles.textDefaultDark}>{name}</Text>
             </View>
         </View>
     );

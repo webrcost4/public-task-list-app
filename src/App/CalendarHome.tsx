@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import Checkbox from 'expo-checkbox';
 
@@ -7,7 +7,8 @@ import { styles } from '../styles/styles';
 
 import { Api } from '../resources/api/api';
 import { propsDataApi, propsStack } from '../../@types';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const dayOfWeek = [
     'Domingo', 
@@ -41,43 +42,56 @@ const CalendarHome = () => {
 
     const navigation = useNavigation<propsStack>();
     const [ tasks, setTasks ] = useState<propsDataApi>();
-    const [dt, setDt] = useState(new Date().toLocaleTimeString());
+
+
+    const [userId, setUserId] = useState<string | null>();
+
+    (async () => {
+        try {
+            const userStor = await AsyncStorage.getItem('userId');
+            setUserId(userStor);
+        } catch (error) {
+            console.log(error);
+        }
+    })();
 
     const deleteOneTask = async (taskId: string) => {
-        await Api.delete(`/delete-one-task/650327aa4ce2ced30cf110d9/${taskId}`)
+        await Api.delete(`/delete-one-task/${userId}/${taskId}`)
             .then(response=> {
                 console.log(response);
             }).catch(err=> console.log(err));
     };
 
     const alterDataApi = async (id: string) => {
-        await Api.put(`/update-task/${id}`, {
+        await Api.put('/update-task', {
+            userId,
+            taskId: id,
             taskCompleted: true
-        }).then(response=> {
-            console.log(response);
+        }).then(()=> {
+            fetchDataApi();
         }).catch(err=> console.log(err));
     };
 
     const fetchDataApi = async () => {
-        await Api.get('/list-all-tasks/650327aa4ce2ced30cf110d9')
+        await Api.get(`/list-all-tasks/${userId}`)
             .then(response=> {
-                setTasks(response.data);
+                setTasks(response.data[0]);
             })
             .catch(err=> console.log(err));
     };
 
 
-    useFocusEffect(
-        useCallback(() => {
+    // useFocusEffect(
+    //     useCallback(() => {
 
-            fetchDataApi();
-            const secTimer = setInterval( () => {
-                setDt(new Date().toLocaleTimeString());
-            },1000);
+    //         fetchDataApi();
+    //         const secTimer = setInterval( () => {
+    //             setDt(new Date().toLocaleTimeString());
+    //         },1000);
 
-            return () => clearInterval(secTimer);
-        }, [])
-    );
+    //         return () => clearInterval(secTimer);
+    //     }, [])
+    // );
 
     return (
         <View style={styles.view}>
@@ -108,12 +122,12 @@ const CalendarHome = () => {
 
                     </View>
 
-                    <Text style={[{
+                    {/* <Text style={[{
                         fontSize: 30,
                         marginBottom: 50
                     }, styles.textDefaultDark]}>
                         { dt }
-                    </Text>
+                    </Text> */}
 
                     {tasks?.tasks.map((element, key) =>(
                         <TouchableHighlight
@@ -137,7 +151,6 @@ const CalendarHome = () => {
                                                 value={Boolean(element.taskCompleted)}
                                                 onValueChange={()=> {
                                                     alterDataApi(element.taskId);
-                                                    fetchDataApi();
                                                 }}
                                                 color={element.description ? '#000' : undefined}
                                             />
@@ -174,16 +187,18 @@ const CalendarHome = () => {
                         </TouchableHighlight>
                     ))}
 
-                    {tasks?.tasks.slice(0, 1).map((element, key) =>(
+                    {/* {tasks?.tasks.slice(0, 1).map((element, key) =>(
                         <View key={key}>
-                            {element.date !== date ? 
+                            {element.date === String(today) ? 
                                 <Text style={[
                                     styles.textDefaultDark,
                                 ]}>Você não tem nenhuma tarefa para hoje</Text> 
-                                : '' 
+                                : <Text style={[
+                                    styles.textDefaultDark,
+                                ]}>Você tem tarefa para hoje preguicoso</Text>  
                             }
                         </View>
-                    ))}
+                    ))} */}
                         
                 </View>
                 

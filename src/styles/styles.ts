@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
         marginTop: 30,
         marginBottom: 50,
         fontFamily: 'WorkSans_VariableFont_Bold',
-        color: '#6cd8af'
+        color: '#000000'
     },
 
     titleGreen: {

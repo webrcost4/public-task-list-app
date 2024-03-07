@@ -4,7 +4,7 @@ export type propsDataApi = {
     tasks: [{
 		id: number,
 		userId: string,
-		date: string,
+		date: Date,
 		title: string,
 		description: string,
 		hour: number,

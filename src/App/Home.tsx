@@ -8,6 +8,8 @@ import { propsDataApi, propsStack } from '../../@types';
 import { styles } from '../styles/styles';
 import { TouchableHighlight } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useUserContext } from '../context/UserContext';
+import { formatDate } from '../resources/functions/functiosn';
 
 
 const Home = () => {
@@ -15,25 +17,30 @@ const Home = () => {
     const navigation = useNavigation<propsStack>();
     const [ tasks, setTasks ] = useState<propsDataApi>();
 
+    const { user } = useUserContext();
+    
+
     const deleteOneTask = async (taskId: string) => {
-        await Api.delete(`/delete-one-task/650327aa4ce2ced30cf110d9/${taskId}`)
+        await Api.delete(`/delete-one-task/${user.name}/${taskId}`)
             .then(response=> {
                 console.log(response);
             }).catch(err=> console.log(err));
     };
 
     const alterDataApi = async (id: string) => {
-        await Api.put(`/update-task/${id}`, {
+        await Api.put('/update-task', {
+            userId: user.userId,
+            taskId: id,
             taskCompleted: true
-        }).then(response=> {
-            console.log(response);
+        }).then(()=> {
+            fetchDataApi();
         }).catch(err=> console.log(err));
     };
 
     const fetchDataApi = async () => {
-        await Api.get('/list-all-tasks/650327aa4ce2ced30cf110d9')
+        await Api.get(`/list-all-tasks/${user.userId}`)
             .then(response=> {
-                setTasks(response.data);
+                setTasks(response.data[0]);
             })
             .catch(err=> console.log(err));
     };
@@ -50,14 +57,16 @@ const Home = () => {
 
                 <View style={{ marginBottom: 200 }}>
                     <Text style={styles.titleHead}>Minhas atividades</Text>
+                    
+
                     {tasks?.tasks.map((element, key)=>(       
                         <View key={key}>
                             {        
-                                element.taskCompleted == false ?
+                                element.taskCompleted === false ?
                                     
                                     <View>
                                         <Text style={styles.titleItemCardGreen}>
-                                            {element.date}
+                                            {formatDate(element.date)}
                                         </Text>
                                         <View style={styles.cardTask}>
 
@@ -66,7 +75,6 @@ const Home = () => {
                                                 value={Boolean(element.taskCompleted)}
                                                 onValueChange={()=> {
                                                     alterDataApi(element.taskId);
-                                                    fetchDataApi();
                                                 }}
                                                 color={element.description ? '#000' : undefined}
                                             />
