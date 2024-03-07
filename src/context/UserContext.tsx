@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { Register } from '../App/account/Register';
 
 interface UserProviderProps {
     children: ReactNode;
@@ -43,7 +44,11 @@ export default function UserProvider ({children}: UserProviderProps) {
 
     return (
         <UserContext.Provider value={{ user }}>
-            {children}
+            {user.userId ? (
+                <>{children}</>
+            ): (
+                <Register />
+            )}
         </UserContext.Provider>
     );
 }
