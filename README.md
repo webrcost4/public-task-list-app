@@ -18,7 +18,9 @@ Estamos animados em anunciar que o backend estará disponível em breve no repos
 
 Sua contribuição é mais do que bem-vinda. Juntos, podemos construir uma comunidade vibrante e tornar o Private Task List ainda mais incrível. Obrigado por fazer parte deste projeto emocionante! 🚀
 
-<img src="print-screen/1.jpg" alt="Texto Alternativo da Imagem" width="200">
-<img src="print-screen/2.jpg" alt="Texto Alternativo da Imagem" width="200">
-<img src="print-screen/3.jpg" alt="Texto Alternativo da Imagem" width="200">
-<img src="print-screen/4.jpg" alt="Texto Alternativo da Imagem" width="200">
+<div style="display: flex; flex-direction: row;">
+    <img src="print-screen/1.jpg" alt="Texto Alternativo da Imagem" width="200">
+    <img src="print-screen/2.jpg" alt="Texto Alternativo da Imagem" width="200">
+    <img src="print-screen/3.jpg" alt="Texto Alternativo da Imagem" width="200">
+    <img src="print-screen/4.jpg" alt="Texto Alternativo da Imagem" width="200">
+</div>
