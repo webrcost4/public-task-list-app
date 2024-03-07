@@ -18,7 +18,7 @@ import CompletedTasks from './App/CompletedTasks';
 import ListOneTask from './App/listOneTask';
 import CalendarHome from './App/CalendarHome';
 import UserProvider from './context/UserContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Router () {
